@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './ContactItem.module.css';
 
-const ContactItem = ({ contact, onDeleteContact }) => (
+export const ContactItem = ({ contact, onDeleteContact }) => (
   <li className={styles.item}>
     <span className={styles.name}>
       {contact.name}: {contact.number}
@@ -17,4 +18,10 @@ const ContactItem = ({ contact, onDeleteContact }) => (
   </li>
 );
 
-export default ContactItem;
+ContactItem.propTypes = {
+  contact: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }).isRequired,
+  onDeleteContact: PropTypes.func.isRequired,
+};

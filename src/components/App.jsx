@@ -1,67 +1,96 @@
-import React, { useState, useEffect, useMemo } from 'react';
 import { nanoid } from 'nanoid';
-import ContactForm from './ContactForm/ContactForm';
-import ContactList from './ContactList/ContactList';
-import Filter from './Filter/Filter';
-
-import '../index.css';
+import { useState, useEffect } from 'react';
+import { ContactForm } from './ContactForm/ContactForm';
+import { Filter } from './Filter/Filter';
+import { ContactList } from './ContactList/ContactList';
 
 export const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const storedContacts = localStorage.getItem('contacts');
-    return storedContacts ? JSON.parse(storedContacts) : [];
-  });
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
-
-  const addContact = (name, number) => {
-    const newContact = {
-      id: nanoid(),
-      name,
-      number,
-    };
-
-    const isContactExists = contacts.some(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
-
-    if (isContactExists) {
-      alert(`${name} is already in contacts!`);
-    } else {
-      setContacts(prevContacts => [...prevContacts, newContact]);
+  const loadFromLocalStorage = () => {
+    try {
+      const localStorageData = localStorage.getItem('phonebook');
+      const parsedlocalStorageData = JSON.parse(localStorageData);
+      if (parsedlocalStorageData !== null) {
+        return parsedlocalStorageData;
+      }
+      return [];
+    } catch (error) {
+      return [];
     }
   };
 
-  const deleteContact = contactId => {
-    setContacts(prevState =>
-      prevState.filter(contact => contact.id !== contactId)
-    );
+  const [contacts, setContacts] = useState(loadFromLocalStorage());
+  const [filter, setFilter] = useState('');
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const name = form.elements.name.value;
+    const number = form.elements.number.value;
+    if (
+      contacts.find(
+        contact =>
+          contact.name.toLowerCase().replace(/\s/g, '') ===
+          name.toLowerCase().replace(/\s/g, '')
+      )
+    ) {
+      alert(`${name.toUpperCase()} is already in contacts!`);
+      return;
+    }
+    setContacts([...contacts, { id: nanoid(), name, number }]);
+    form.reset();
   };
 
-  const changeFilter = ev => {
-    setFilter({ filter: ev.target.value });
+  const handleFilter = e => {
+    const form = e.currentTarget;
+    const filterValue = form.elements.filter.value;
+    setFilter(filterValue);
   };
 
-  const getFilteredContacts = useMemo(() => {
-    const normalizedFilter = filter.toLowerCase();
+  const handleDelete = id => {
+    const index = contacts.findIndex(contact => contact.id === id);
+    contacts.splice(index, 1);
+    setContacts([...contacts]);
+  };
 
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  }, [contacts, filter]);
+  useEffect(() => {
+    localStorage.setItem('phonebook', JSON.stringify(contacts));
+  }, [contacts]);
 
   return (
-    <div style={{ maxWidth: '600px', padding: '0 20px', margin: '0 auto' }}>
-      <h1>Phonebook</h1>
-      <ContactForm onAddContact={addContact} />
-      <h2>Contacts</h2>
-      <Filter value={filter} onChangeFilter={changeFilter} />
+    <div
+      style={{
+        margin: '0 auto',
+        width: '60%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 20,
+      }}
+    >
+      <h1
+        style={{
+          fontWeight: 500,
+          paddingTop: 20,
+          paddingBottom: 20,
+        }}
+      >
+        Phonebook
+      </h1>
+      <ContactForm handleSubmit={handleSubmit} />
+
+      <h2
+        style={{
+          fontWeight: 500,
+        }}
+      >
+        Contacts
+      </h2>
+      <Filter handleFilter={handleFilter} />
       <ContactList
-        contacts={getFilteredContacts}
-        onDeleteContact={deleteContact}
+        contacts={contacts}
+        filter={filter}
+        handleDelete={handleDelete}
       />
     </div>
   );

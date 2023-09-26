@@ -1,18 +1,23 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-
 import styles from './Filter.module.css';
 
-export const Filter = ({ value, onChangeFilter }) => (
-  <label className={styles.label}>
-    Filter contacts by name:
-    <input type="text" value={value} onChange={onChangeFilter} />
-  </label>
-);
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChangeFilter: PropTypes.func.isRequired,
+export const Filter = ({ handleFilter }) => {
+  return (
+    <form onChange={handleFilter} className={styles.form}>
+      <label className={styles.formItem}>
+        Find contacts by name
+        <input
+          className={styles.formInput}
+          type="text"
+          name="filter"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        />
+      </label>
+    </form>
+  );
 };
 
-export default Filter;
+Filter.propTypes = {
+  handleFilter: PropTypes.func.isRequired,
+};

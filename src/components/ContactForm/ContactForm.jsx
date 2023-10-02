@@ -3,12 +3,12 @@ import styles from './ContactForm.module.css';
 
 export const ContactForm = ({ handleSubmit }) => {
   return (
-    <div className={styles.container}>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className={styles.contactForm}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <label className={styles.formItem}>
           Name
           <input
-            className={styles.input}
+            className={styles.formInput}
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -16,10 +16,10 @@ export const ContactForm = ({ handleSubmit }) => {
             required
           />
         </label>
-        <label>
+        <label className={styles.formItem}>
           Number
           <input
-            className={styles.input}
+            className={styles.formInput}
             type="tel"
             name="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
@@ -27,7 +27,9 @@ export const ContactForm = ({ handleSubmit }) => {
             required
           />
         </label>
-        <button type="submit">Add contact</button>
+        <button type="submit" className={styles.btn}>
+          Add contact
+        </button>
       </form>
     </div>
   );

@@ -14,7 +14,7 @@ export const ContactList = ({ handleDelete, filter, contacts }) => {
             <button
               onClick={() => handleDelete(el.id)}
               type="button"
-              className={styles.button}
+              className={styles.btn}
             >
               Delete
             </button>

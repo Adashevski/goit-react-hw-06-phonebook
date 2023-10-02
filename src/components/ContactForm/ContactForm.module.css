@@ -1,30 +1,33 @@
-.container {
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f8f8f8;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.contactForm {
+  padding: 20px;
+  border: solid 1px black;
+  width: 80%;
+  max-width: 500px;
+  background-color: rgb(235, 235, 235);
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+.form {
+  display: flex;
+  flex-direction: column;
 }
-
-input[type='text'],
-input[type='tel'] {
-  width: 95%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+.formItem {
+  display: flex;
+  flex-direction: column;
 }
-
-button {
-  padding: 5px 10px;
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
+.formInput {
+  margin: 5px 0 10px 0;
+  padding: 5px 0;
+}
+.btn {
   cursor: pointer;
+  width: 100px;
+  height: 25px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(209, 243, 206);
+  box-shadow: 8px 8px 12px 0px rgba(66, 68, 90, 1);
+}
+
+.btn:hover {
+  background-color: rgb(59, 156, 194);
 }

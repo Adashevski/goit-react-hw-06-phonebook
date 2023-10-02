@@ -1,32 +1,36 @@
 import styles from './ContactForm.module.css';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/actions';
-
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
+import { addContact } from 'redux/contactsSlice';
+import { nanoid } from 'nanoid';
 
 export const ContactForm = () => {
-  const [contact, setContact] = useState({ name: '', number: '' });
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
   const dispatch = useDispatch();
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-
-    setContact(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
+  const handleChange = ev => {
+    const { name, value } = ev.target;
+    if (name === 'name') {
+      setName(value);
+    } else if (name === 'number') {
+      setNumber(value);
+    }
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    dispatch(addContact(contact.name, contact.number));
-
-    setContact(() => ({ ...INITIAL_STATE }));
+  const handleSubmit = ev => {
+    ev.preventDefault();
+    const newContact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+    dispatch(addContact(newContact));
+    setName('');
+    setNumber('');
   };
+
   return (
     <div className={styles.contactForm}>
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -40,6 +44,7 @@ export const ContactForm = () => {
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
             onChange={handleChange}
+            value={name}
           />
         </label>
         <label className={styles.formItem}>
@@ -52,6 +57,7 @@ export const ContactForm = () => {
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
             onChange={handleChange}
+            value={number}
           />
         </label>
         <button type="submit" className={styles.btn}>
